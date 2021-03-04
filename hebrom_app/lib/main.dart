@@ -1,19 +1,24 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hebrom_app/Debouncer.dart';
 import 'Animation/FadeAnimation.dart';
+import 'package:flutter/src/rendering/box.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
   ));
-  runApp(MyApp());
+  runApp(HebromApp());
 }
 
-class MyApp extends StatelessWidget {
+class HebromApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'HebromApp',
+      debugShowCheckedModeBanner: false,
       theme:
           ThemeData(brightness: Brightness.light, primaryColor: Colors.white),
       darkTheme: ThemeData(
@@ -34,6 +39,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final _pesquisa = TextEditingController();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _debouncer = Debouncer(milliseconds: 500);
+
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
@@ -57,6 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Row(
           children: [
@@ -90,14 +100,30 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: Colors.white,
                   height: 35,
                   child: Container(
-                    padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                    padding: EdgeInsets.all(0),
                     decoration: new BoxDecoration(
                         color: Colors.grey[100],
                         borderRadius: new BorderRadius.circular(12)),
                     child: new TextFormField(
+                      controller: _pesquisa,
+                      onChanged: (text) => {
+                        _debouncer.run(() {
+                          showDialog(
+                              context: _scaffoldKey.currentState.context,
+                              builder: (BuildContext dialogContext) {
+                                return AlertDialog(
+                                  title: Text('Opa'),
+                                  content: Text(text + _pesquisa.text),
+                                );
+                              });
+                        })
+                      },
                       decoration: InputDecoration(
                           enabledBorder: InputBorder.none,
-                          icon: Icon(Icons.search),
+                          prefixIcon: Icon(
+                            Icons.search,
+                            color: Colors.black54,
+                          ),
                           hintText: 'Pesquisar...'),
                     ),
                   )),
@@ -221,6 +247,31 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
                             ),
                           )),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.all(10),
+                child: Column(
+                  children: [
+                    Card(
+                      child: Column(
+                        children: [
+                          Image.asset('assets/banner.jpg'),
+                          ListTile(
+                              title: Text('Título do Evento',
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.w500)),
+                              subtitle: Text(
+                                'Descrição do Evento Descrição do Evento Descrição do Evento  Descrição do Evento ',
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              trailing: FlatButton(
+                                child: Text('+ VER MAIS'),
+                              )),
+                        ],
+                      ),
                     ),
                   ],
                 ),
