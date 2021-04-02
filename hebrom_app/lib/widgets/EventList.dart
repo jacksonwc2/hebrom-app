@@ -6,12 +6,16 @@ import 'package:hebrom_app/widgets/CardEvent.dart';
 class EventList extends State {
   Widget lista(context, snapshot) {
     if (snapshot.connectionState == ConnectionState.waiting) {
-      return Text("CAREGANDO");
+      return Text("Carregando...");
     }
+
     if (snapshot.hasData && !snapshot.data.isEmpty) {
       return renderizarEventos(snapshot.data);
     } else {
-      return renderizarNaoHaDados();
+      return FadeAnimation(
+        2,
+        Text("Não há Dados."),
+      );
     }
   }
 
@@ -27,29 +31,12 @@ class EventList extends State {
       physics: ScrollPhysics(),
       itemBuilder: (context, index) {
         Evento evento = data[index];
-
-        return GestureDetector(
-          onTap: () {
-            print('Hello');
-          },
-          child: cardEvent(
-              image: evento.banner,
-              titulo: evento.titulo,
-              descricao: evento.descricao,
-              codigoEntidade: evento.codigoEntidade),
-        );
+        return cardEvent(evento, context);
       },
       separatorBuilder: (context, index) => Container(
         height: 10,
       ),
       itemCount: data.length,
-    );
-  }
-
-  Widget renderizarNaoHaDados() {
-    return FadeAnimation(
-      2,
-      Text("Não há Dados."),
     );
   }
 }

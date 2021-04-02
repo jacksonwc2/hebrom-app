@@ -1,7 +1,10 @@
 import 'package:date_field/date_field.dart';
 import 'package:hebrom_app/Debouncer.dart';
+import 'package:hebrom_app/dto/Evento.dart';
+import 'package:hebrom_app/widgets/EventList.dart';
 import 'package:searchable_dropdown/searchable_dropdown.dart';
 import 'package:flutter/material.dart';
+import 'package:hebrom_app/service/evento_service.dart' as EventService;
 
 import '../animation/FadeAnimation.dart';
 
@@ -14,8 +17,20 @@ class EventsPage extends StatefulWidget {
 
 class _EventsPageState extends State<EventsPage> {
   final _pesquisa = TextEditingController();
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _debouncer = Debouncer(milliseconds: 500);
+  Future<List<Evento>> eventos;
+
+  @override
+  void initState() {
+    super.initState();
+    getEventos();
+  }
+
+  getEventos() async {
+    setState(() {
+      eventos = EventService.getEvento('eventoService/adquirirTodos/');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,14 +51,7 @@ class _EventsPageState extends State<EventsPage> {
                   controller: _pesquisa,
                   onChanged: (text) => {
                     _debouncer.run(() {
-                      showDialog(
-                          context: _scaffoldKey.currentState.context,
-                          builder: (BuildContext dialogContext) {
-                            return AlertDialog(
-                              title: Text('Opa'),
-                              content: Text(text + _pesquisa.text),
-                            );
-                          });
+                      // realizarPesquisa
                     })
                   },
                   decoration: InputDecoration(
@@ -175,31 +183,11 @@ class _EventsPageState extends State<EventsPage> {
           ),
           Container(
             padding: EdgeInsets.all(10),
-            child: Column(
-              children: [
-                Card(
-                  child: Column(
-                    children: [
-                      Image.asset('assets/banner.jpg'),
-                      ListTile(
-                          title: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Nome da Entidade',
-                                  style: TextStyle(fontSize: 10)),
-                              Text('Título do Evento',
-                                  style: TextStyle(fontWeight: FontWeight.w500))
-                            ],
-                          ),
-                          subtitle: Text(
-                            'Descrição do Evento Descrição do Evento Descrição do Evento  Descrição do Evento ',
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          trailing: Icon(Icons.chevron_right)),
-                    ],
-                  ),
-                ),
-              ],
+            child: FutureBuilder(
+              future: eventos,
+              builder: (context, snapshort) {
+                return EventList().lista(context, snapshort);
+              },
             ),
           ),
         ],

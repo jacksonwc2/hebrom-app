@@ -8,31 +8,32 @@ class Evento {
   String titulo;
   String descricao;
   String banner;
+  String descricaoEntidade;
 
-  Evento({
-    this.id,
-    this.codigoCategoria,
-    this.codigoEntidade,
-    this.codigoLocalizacao,
-    this.dataInicio,
-    this.dataFinal,
-    this.titulo,
-    this.descricao,
-    this.banner,
-  });
+  Evento(
+      {this.id,
+      this.codigoCategoria,
+      this.codigoEntidade,
+      this.codigoLocalizacao,
+      this.dataInicio,
+      this.dataFinal,
+      this.titulo,
+      this.descricao,
+      this.banner,
+      this.descricaoEntidade});
 
   factory Evento.fromJson(Map<String, dynamic> json) {
     return Evento(
-      id: json['id'],
-      codigoCategoria: json['codigoCategoria'],
-      codigoEntidade: json['codigoEntidade'],
-      codigoLocalizacao: json['codigoLocalizacao'],
-      dataInicio: json['dataInicio'],
-      dataFinal: json['dataFinal'],
-      titulo: json['titulo'],
-      descricao: json['descricao'],
-      banner: json['banner'],
-    );
+        id: json['id'],
+        codigoCategoria: json['codigoCategoria'],
+        codigoEntidade: json['codigoEntidade'],
+        codigoLocalizacao: json['codigoLocalizacao'],
+        dataInicio: json['dataInicio'],
+        dataFinal: json['dataFinal'],
+        titulo: json['titulo'],
+        descricao: json['descricao'],
+        banner: json['banner'],
+        descricaoEntidade: json['descricaoEntidade']);
   }
 
   Map<String, dynamic> toJson() {

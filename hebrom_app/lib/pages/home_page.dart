@@ -17,15 +17,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _pesquisa = TextEditingController();
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
-  final _debouncer = Debouncer(milliseconds: 500);
-
-  DateTime selectedData;
-
   int _selectedIndex = 0;
-
-  static const List<Widget> _widgetOptions = [];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -33,26 +25,9 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  List<int> selectedItems = [1];
-  final List<DropdownMenuItem> items = [
-    DropdownMenuItem(
-      child: Text('Categoria 1'),
-      value: 'Categoria 1',
-    ),
-    DropdownMenuItem(
-      child: Text('Categoria 2'),
-      value: 'Categoria 2',
-    ),
-    DropdownMenuItem(
-      child: Text('Categoria 3'),
-      value: 'Categoria 3',
-    )
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       appBar: AppBar(
         title: Row(
           children: [
