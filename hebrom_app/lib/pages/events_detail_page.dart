@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:hebrom_app/dto/Evento.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:hebrom_app/service/evento_service.dart' as EventService;
 
 class EventsDetailPage extends StatefulWidget {
@@ -62,8 +62,8 @@ class _EventsDetailPageState extends State<EventsDetailPage> {
                       trailing: Icon(Icons.calendar_today)))
               : Container(),
           InkWell(
-              onTap: () {
-                launch(widget.evento.uriLocalizacao);
+              onTap: () async {
+                await launch(widget.evento.uriLocalizacao);
               },
               child: Container(
                   decoration: new BoxDecoration(

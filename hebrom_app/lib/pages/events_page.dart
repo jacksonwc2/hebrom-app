@@ -23,12 +23,13 @@ class _EventsPageState extends State<EventsPage> {
   @override
   void initState() {
     super.initState();
-    getEventos();
+    getEventos(null, null);
   }
 
-  getEventos() async {
+  getEventos(String pesquisa, int categoria) async {
     setState(() {
-      eventos = EventService.getEvento('eventoService/adquirirTodos/');
+      eventos = EventService.getEvento(
+          'eventoService/adquirirTodos', pesquisa, categoria);
     });
   }
 
@@ -51,7 +52,7 @@ class _EventsPageState extends State<EventsPage> {
                   controller: _pesquisa,
                   onChanged: (text) => {
                     _debouncer.run(() {
-                      // realizarPesquisa
+                      getEventos(text, null);
                     })
                   },
                   decoration: InputDecoration(
