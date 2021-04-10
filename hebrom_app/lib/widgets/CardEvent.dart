@@ -29,7 +29,7 @@ Widget cardEvent(Evento evento, context) {
                 ],
               ),
               subtitle: Text(
-                evento.descricao,
+                evento.descricao != null ? evento.descricao : "",
                 overflow: TextOverflow.ellipsis,
               ),
               trailing: Icon(Icons.chevron_right)),

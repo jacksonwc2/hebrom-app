@@ -1,11 +1,6 @@
-import 'package:date_field/date_field.dart';
-import 'package:hebrom_app/Debouncer.dart';
 import 'package:hebrom_app/pages/events_page.dart';
 import 'package:hebrom_app/pages/filters_page.dart';
-import 'package:searchable_dropdown/searchable_dropdown.dart';
 import 'package:flutter/material.dart';
-
-import '../animation/FadeAnimation.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.title}) : super(key: key);

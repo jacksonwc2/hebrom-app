@@ -9,6 +9,10 @@ class Evento {
   String descricao;
   String banner;
   String descricaoEntidade;
+  String descricaoCategoria;
+  String descricaoLocalizacao;
+  String uriLocalizacao;
+  String obsLocalizacao;
 
   Evento(
       {this.id,
@@ -20,7 +24,11 @@ class Evento {
       this.titulo,
       this.descricao,
       this.banner,
-      this.descricaoEntidade});
+      this.descricaoEntidade,
+      this.descricaoCategoria,
+      this.descricaoLocalizacao,
+      this.uriLocalizacao,
+      this.obsLocalizacao});
 
   factory Evento.fromJson(Map<String, dynamic> json) {
     return Evento(
@@ -33,7 +41,11 @@ class Evento {
         titulo: json['titulo'],
         descricao: json['descricao'],
         banner: json['banner'],
-        descricaoEntidade: json['descricaoEntidade']);
+        descricaoEntidade: json['descricaoEntidade'],
+        descricaoCategoria: json['descricaoCategoria'],
+        descricaoLocalizacao: json['descricaoLocalizacao'],
+        uriLocalizacao: json['uriLocalizacao'],
+        obsLocalizacao: json['obsLocalizacao']);
   }
 
   Map<String, dynamic> toJson() {
@@ -48,6 +60,11 @@ class Evento {
     data['titulo'] = this.titulo;
     data['descricao'] = this.descricao;
     data['banner'] = this.banner;
+    data['descricaoEntidade'] = this.descricaoEntidade;
+    data['descricaoCategoria'] = this.descricaoCategoria;
+    data['descricaoLocalizacao'] = this.descricaoLocalizacao;
+    data['uriLocalizacao'] = this.uriLocalizacao;
+    data['obsLocalizacao'] = this.obsLocalizacao;
 
     return data;
   }

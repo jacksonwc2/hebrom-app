@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:hebrom_app/dto/Evento.dart';
 import 'package:hebrom_app/service/evento_service.dart' as EventService;
 
@@ -22,16 +22,66 @@ class _EventsDetailPageState extends State<EventsDetailPage> {
         children: [
           Image.network(EventService.getUriBanner(widget.evento.banner)),
           Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.black26,
-                width: 2,
-              ),
-            ),
-            child: Text(widget.evento.titulo),
-          ),
-          Text(widget.evento.descricao),
-          Text(widget.evento.descricaoEntidade),
+              decoration: new BoxDecoration(color: Colors.grey[200]),
+              child: ListTile(
+                  title: Text(widget.evento.titulo,
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  trailing: Icon(Icons.favorite_border))),
+          Container(
+              decoration: new BoxDecoration(
+                  border: Border.all(color: Colors.grey[200])),
+              child: ListTile(
+                  title: Text('Entidade', style: TextStyle(fontSize: 10)),
+                  subtitle: Text(widget.evento.descricaoEntidade,
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  trailing: Icon(Icons.home_work))),
+          Container(
+              decoration: new BoxDecoration(
+                  border: Border.all(color: Colors.grey[200])),
+              child: ListTile(
+                  title: Text('Categoria', style: TextStyle(fontSize: 10)),
+                  subtitle: Text(widget.evento.descricaoCategoria,
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  trailing: Icon(Icons.local_offer))),
+          Container(
+              decoration: new BoxDecoration(
+                  border: Border.all(color: Colors.grey[200])),
+              child: ListTile(
+                  title: Text('Início', style: TextStyle(fontSize: 10)),
+                  subtitle: Text(widget.evento.dataInicio,
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  trailing: Icon(Icons.calendar_today))),
+          widget.evento.dataFinal != null
+              ? Container(
+                  decoration: new BoxDecoration(
+                      border: Border.all(color: Colors.grey[200])),
+                  child: ListTile(
+                      title: Text('Final', style: TextStyle(fontSize: 10)),
+                      subtitle: Text(widget.evento.dataFinal,
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      trailing: Icon(Icons.calendar_today)))
+              : Container(),
+          InkWell(
+              onTap: () {
+                launch(widget.evento.uriLocalizacao);
+              },
+              child: Container(
+                  decoration: new BoxDecoration(
+                      border: Border.all(color: Colors.grey[200])),
+                  child: ListTile(
+                      title: Text(widget.evento.descricaoLocalizacao,
+                          style: TextStyle(fontSize: 10)),
+                      subtitle: Text(widget.evento.obsLocalizacao,
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      trailing: Icon(Icons.place)))),
+          widget.evento.descricao != null
+              ? Container(
+                  child: ListTile(
+                  title: Text('Sobre o Evento',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  subtitle: Text(widget.evento.descricao),
+                ))
+              : Container()
         ],
       ),
     )));
