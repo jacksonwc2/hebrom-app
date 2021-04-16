@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:hebrom_app/dto/Categoria.dart';
 import 'package:hebrom_app/dto/Evento.dart';
 import 'package:http/http.dart' as http;
 import 'package:toast/toast.dart';
@@ -18,8 +19,12 @@ Future<List<Evento>> getEvento(
     }
   }
 
+  if (categoria != null && (pesquisa == null || pesquisa == "")) {
+    url += "?";
+  }
+
   if (categoria != null) {
-    url += '?categoria=' + categoria.toString();
+    url += 'categoria=' + categoria.toString();
   }
 
   http.Response response = await http.get(BASE_URL + url, headers: HEADERS);
@@ -37,4 +42,18 @@ Future<List<Evento>> getEvento(
 
 String getUriBanner(String fileName) {
   return BASE_URL + IMAGEM_SERVICE + fileName;
+}
+
+Future<List<Categoria>> getCategorias(url) async {
+  http.Response response = await http.get(BASE_URL + url, headers: HEADERS);
+
+  var body = json.decode(response.body);
+
+  if (response.statusCode == STATUS_CODE_SUCESS) {
+    List<Categoria> retorno = body.map<Categoria>((map) {
+      return Categoria.fromJson(map);
+    }).toList();
+
+    return retorno;
+  }
 }

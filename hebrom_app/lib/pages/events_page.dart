@@ -1,6 +1,8 @@
 import 'package:date_field/date_field.dart';
 import 'package:hebrom_app/Debouncer.dart';
+import 'package:hebrom_app/dto/Categoria.dart';
 import 'package:hebrom_app/dto/Evento.dart';
+import 'package:hebrom_app/widgets/CategoriaList.dart';
 import 'package:hebrom_app/widgets/EventList.dart';
 import 'package:searchable_dropdown/searchable_dropdown.dart';
 import 'package:flutter/material.dart';
@@ -16,20 +18,36 @@ class EventsPage extends StatefulWidget {
 }
 
 class _EventsPageState extends State<EventsPage> {
+  int categoriaId = null;
   final _pesquisa = TextEditingController();
   final _debouncer = Debouncer(milliseconds: 500);
   Future<List<Evento>> eventos;
+  Future<List<Categoria>> categorias;
 
   @override
   void initState() {
     super.initState();
     getEventos(null, null);
+    getCategorias();
+  }
+
+  callback(id) {
+    setState(() {
+      categoriaId = id;
+      getEventos(_pesquisa.text, id);
+    });
   }
 
   getEventos(String pesquisa, int categoria) async {
     setState(() {
       eventos = EventService.getEvento(
           'eventoService/adquirirTodos', pesquisa, categoria);
+    });
+  }
+
+  getCategorias() async {
+    setState(() {
+      categorias = EventService.getCategorias('categoriaService/adquirirTodos');
     });
   }
 
@@ -52,7 +70,7 @@ class _EventsPageState extends State<EventsPage> {
                   controller: _pesquisa,
                   onChanged: (text) => {
                     _debouncer.run(() {
-                      getEventos(text, null);
+                      getEventos(text, categoriaId);
                     })
                   },
                   decoration: InputDecoration(
@@ -64,126 +82,14 @@ class _EventsPageState extends State<EventsPage> {
                       hintText: 'Pesquisar...'),
                 ),
               )),
-          Container(
-            padding: EdgeInsets.fromLTRB(10, 10, 0, 10),
-            color: Colors.white,
-            height: 50,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: <Widget>[
-                AspectRatio(
-                  aspectRatio: 3.5 / 1,
-                  child: FadeAnimation(
-                      1,
-                      Container(
-                        margin: EdgeInsets.only(right: 10),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(width: 1, color: Colors.grey)),
-                        child: Center(
-                          child: Text(
-                            "Categorias",
-                            style: TextStyle(fontSize: 14),
-                          ),
-                        ),
-                      )),
-                ),
-                AspectRatio(
-                  aspectRatio: 3.5 / 1,
-                  child: FadeAnimation(
-                      1,
-                      Container(
-                        margin: EdgeInsets.only(right: 10),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(width: 1, color: Colors.grey)),
-                        child: Center(
-                          child: Text(
-                            "Categorias",
-                            style: TextStyle(fontSize: 14),
-                          ),
-                        ),
-                      )),
-                ),
-                AspectRatio(
-                  aspectRatio: 3.5 / 1,
-                  child: FadeAnimation(
-                      1,
-                      Container(
-                        margin: EdgeInsets.only(right: 10),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(width: 1, color: Colors.grey)),
-                        child: Center(
-                          child: Text(
-                            "Categorias",
-                            style: TextStyle(fontSize: 14),
-                          ),
-                        ),
-                      )),
-                ),
-                AspectRatio(
-                  aspectRatio: 3.5 / 1,
-                  child: FadeAnimation(
-                      1,
-                      Container(
-                        margin: EdgeInsets.only(right: 10),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(width: 1, color: Colors.grey)),
-                        child: Center(
-                          child: Text(
-                            "Categorias",
-                            style: TextStyle(fontSize: 14),
-                          ),
-                        ),
-                      )),
-                ),
-                AspectRatio(
-                  aspectRatio: 3.5 / 1,
-                  child: FadeAnimation(
-                      1,
-                      Container(
-                        margin: EdgeInsets.only(right: 10),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(width: 1, color: Colors.grey)),
-                        child: Center(
-                          child: Text(
-                            "Categorias",
-                            style: TextStyle(fontSize: 14),
-                          ),
-                        ),
-                      )),
-                ),
-                AspectRatio(
-                  aspectRatio: 3.5 / 1,
-                  child: FadeAnimation(
-                      1,
-                      Container(
-                        margin: EdgeInsets.only(right: 10),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(width: 1, color: Colors.grey)),
-                        child: Center(
-                          child: Text(
-                            "Categorias",
-                            style: TextStyle(fontSize: 14),
-                          ),
-                        ),
-                      )),
-                ),
-              ],
-            ),
+          FutureBuilder(
+            future: categorias,
+            builder: (context, snapshort) {
+              return CategoriaList().lista(context, snapshort, callback);
+            },
           ),
           Container(
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.all(5),
             child: FutureBuilder(
               future: eventos,
               builder: (context, snapshort) {
