@@ -2,7 +2,6 @@ import 'package:date_field/date_field.dart';
 import 'package:hebrom_app/Debouncer.dart';
 import 'package:hebrom_app/dto/Categoria.dart';
 import 'package:hebrom_app/dto/Evento.dart';
-import 'package:hebrom_app/widgets/CategoriaList.dart';
 import 'package:hebrom_app/widgets/EventList.dart';
 import 'package:searchable_dropdown/searchable_dropdown.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +22,7 @@ class _EventsPageState extends State<EventsPage> {
   final _debouncer = Debouncer(milliseconds: 500);
   Future<List<Evento>> eventos;
   Future<List<Categoria>> categorias;
+  List _selectedIndexs = [];
 
   @override
   void initState() {
@@ -84,8 +84,56 @@ class _EventsPageState extends State<EventsPage> {
               )),
           FutureBuilder(
             future: categorias,
-            builder: (context, snapshort) {
-              return CategoriaList().lista(context, snapshort, callback);
+            builder: (context, snapshot) {
+              return Container(
+                  padding: EdgeInsets.fromLTRB(10, 10, 0, 10),
+                  color: Colors.white,
+                  height: 50,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      final data = snapshot.data;
+                      final _isSelected = _selectedIndexs.contains(index);
+                      Categoria categoria = data[index];
+                      return InkWell(
+                          onTap: () {
+                            setState(() {
+                              if (_isSelected) {
+                                _selectedIndexs = [];
+                                callback(null);
+                              } else {
+                                _selectedIndexs = [];
+                                _selectedIndexs.add(index);
+                                callback(categoria.id);
+                              }
+                            });
+                          },
+                          child: Container(
+                            padding: EdgeInsets.only(left: 20, right: 20),
+                            margin: EdgeInsets.only(right: 10),
+                            decoration: BoxDecoration(
+                                color:
+                                    _isSelected ? Colors.black87 : Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                    width: 1,
+                                    color: _isSelected
+                                        ? Colors.black87
+                                        : Colors.black)),
+                            child: Center(
+                              child: Text(
+                                categoria.descricao,
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: _isSelected
+                                        ? Colors.white
+                                        : Colors.black),
+                              ),
+                            ),
+                          ));
+                    },
+                    itemCount: snapshot.data.length,
+                  ));
             },
           ),
           Container(
