@@ -1,6 +1,6 @@
+import 'package:intl/intl.dart';
 import 'package:date_field/date_field.dart';
-import 'package:hebrom_app/Debouncer.dart';
-import 'package:hebrom_app/pages/events_page.dart';
+import 'package:hebrom_app/service/evento_service.dart' as EventService;
 import 'package:searchable_dropdown/searchable_dropdown.dart';
 import 'package:flutter/material.dart';
 
@@ -14,23 +14,43 @@ class FiltersPage extends StatefulWidget {
 class _FiltersPageState extends State<FiltersPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  DateTime selectedData;
-  List<int> selectedItems = [1];
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      final successEntidades = (list) {
+        list.forEach((x) => {
+              itemsEntidade.add(DropdownMenuItem(
+                child: Text(x.nomeFantasia),
+                value: x.id,
+              ))
+            });
+      };
 
-  final List<DropdownMenuItem> items = [
-    DropdownMenuItem(
-      child: Text('Categoria 1'),
-      value: 'Categoria 1',
-    ),
-    DropdownMenuItem(
-      child: Text('Categoria 2'),
-      value: 'Categoria 2',
-    ),
-    DropdownMenuItem(
-      child: Text('Categoria 3'),
-      value: 'Categoria 3',
-    )
-  ];
+      EventService.getEntidades(
+          'entidadeService/adquirirTodos', successEntidades);
+
+      final successLocalizacao = (list) {
+        list.forEach((x) => {
+              itemsLocalizacao.add(DropdownMenuItem(
+                child: Text(x.descricao),
+                value: x.id,
+              ))
+            });
+      };
+
+      EventService.getLocalizacao(
+          'localizacaoService/adquirirTodos', successLocalizacao);
+    });
+  }
+
+  DateTime dateInicio;
+  DateTime dateFim;
+  List<int> selectedItemsEntidades = [];
+  List<int> selectedItemsLocalizacao = [];
+
+  final List<DropdownMenuItem> itemsLocalizacao = [];
+  final List<DropdownMenuItem> itemsEntidade = [];
 
   @override
   Widget build(BuildContext context) {
@@ -55,14 +75,14 @@ class _FiltersPageState extends State<FiltersPage> {
               child: SearchableDropdown.multiple(
                 underline: SizedBox(),
                 doneButton: 'Fechar',
-                items: items,
-                selectedItems: selectedItems,
+                items: itemsEntidade,
+                selectedItems: selectedItemsEntidades,
                 hint: "Selecione",
-                searchHint: "Selecione as Categorias",
+                searchHint: "Selecione as Entidades",
                 displayClearIcon: true,
                 onChanged: (value) {
                   setState(() {
-                    selectedItems = value;
+                    selectedItemsEntidades = value;
                   });
                 },
                 dialogBox: true,
@@ -73,9 +93,9 @@ class _FiltersPageState extends State<FiltersPage> {
                       RaisedButton(
                           onPressed: () {
                             setState(() {
-                              selectedItems.clear();
-                              selectedItems.addAll(
-                                  Iterable<int>.generate(items.length)
+                              selectedItemsEntidades.clear();
+                              selectedItemsEntidades.addAll(
+                                  Iterable<int>.generate(itemsEntidade.length)
                                       .toList());
                             });
                           },
@@ -83,7 +103,7 @@ class _FiltersPageState extends State<FiltersPage> {
                       RaisedButton(
                           onPressed: () {
                             setState(() {
-                              selectedItems.clear();
+                              selectedItemsEntidades.clear();
                             });
                           },
                           child: Text("Nenhum")),
@@ -109,14 +129,14 @@ class _FiltersPageState extends State<FiltersPage> {
               child: SearchableDropdown.multiple(
                 underline: SizedBox(),
                 doneButton: 'Fechar',
-                items: items,
-                selectedItems: selectedItems,
+                items: itemsLocalizacao,
+                selectedItems: selectedItemsLocalizacao,
                 hint: "Selecione",
-                searchHint: "Selecione as Categorias",
+                searchHint: "Selecione as Localizações",
                 displayClearIcon: true,
                 onChanged: (value) {
                   setState(() {
-                    selectedItems = value;
+                    selectedItemsLocalizacao = value;
                   });
                 },
                 dialogBox: true,
@@ -127,9 +147,10 @@ class _FiltersPageState extends State<FiltersPage> {
                       RaisedButton(
                           onPressed: () {
                             setState(() {
-                              selectedItems.clear();
-                              selectedItems.addAll(
-                                  Iterable<int>.generate(items.length)
+                              selectedItemsLocalizacao.clear();
+                              selectedItemsLocalizacao.addAll(
+                                  Iterable<int>.generate(
+                                          itemsLocalizacao.length)
                                       .toList());
                             });
                           },
@@ -137,7 +158,7 @@ class _FiltersPageState extends State<FiltersPage> {
                       RaisedButton(
                           onPressed: () {
                             setState(() {
-                              selectedItems.clear();
+                              selectedItemsLocalizacao.clear();
                             });
                           },
                           child: Text("Nenhum")),
@@ -162,6 +183,13 @@ class _FiltersPageState extends State<FiltersPage> {
                     borderRadius: new BorderRadius.circular(12)),
                 child: DateField(
                   label: 'Selecione',
+                  dateFormat: DateFormat('dd/MM/yyyy'),
+                  onDateSelected: (DateTime value) {
+                    setState(() {
+                      dateInicio = value;
+                    });
+                  },
+                  selectedDate: dateInicio,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.only(left: 10, right: 10),
                     enabledBorder: InputBorder.none,
@@ -182,6 +210,13 @@ class _FiltersPageState extends State<FiltersPage> {
                     borderRadius: new BorderRadius.circular(12)),
                 child: DateField(
                   label: 'Selecione',
+                  dateFormat: DateFormat('dd/MM/yyyy'),
+                  onDateSelected: (DateTime value) {
+                    setState(() {
+                      dateFim = value;
+                    });
+                  },
+                  selectedDate: dateFim,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.only(left: 10, right: 10),
                     enabledBorder: InputBorder.none,
