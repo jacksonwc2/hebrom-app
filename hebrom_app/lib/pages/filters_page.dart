@@ -43,7 +43,14 @@ class _FiltersPageState extends State<FiltersPage> {
     final SharedPreferences prefs = await _prefs;
 
     final successEntidades = (list) {
-      List<dynamic> values = json.decode(prefs.getString('entidades'));
+
+      List<dynamic> values = [];
+
+      if(prefs.getString('entidades') != null){
+        values = json.decode(prefs.getString('entidades'));
+      }
+
+
       for (var x in list) {
         var item = DropdownMenuItem(
           child: Text(x.nomeFantasia),
@@ -58,7 +65,11 @@ class _FiltersPageState extends State<FiltersPage> {
     };
 
     final successLocalizacao = (list) {
-      List<dynamic> values = json.decode(prefs.getString('localizacoes'));
+      List<dynamic> values = [];
+      if(prefs.getString('localizacoes') != null){
+        values = json.decode(prefs.getString('localizacoes'));
+      }
+
       for (var x in list) {
         var item = DropdownMenuItem(
           child: Text(x.descricao),
