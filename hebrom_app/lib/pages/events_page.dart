@@ -1,14 +1,9 @@
-import 'package:date_field/date_field.dart';
 import 'package:hebrom_app/Debouncer.dart';
 import 'package:hebrom_app/dto/Categoria.dart';
 import 'package:hebrom_app/dto/Evento.dart';
 import 'package:hebrom_app/widgets/EventList.dart';
-import 'package:searchable_dropdown/searchable_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:hebrom_app/service/evento_service.dart' as EventService;
-import 'package:shared_preferences/shared_preferences.dart';
-
-import '../animation/FadeAnimation.dart';
 
 class EventsPage extends StatefulWidget {
   EventsPage({Key key}) : super(key: key);

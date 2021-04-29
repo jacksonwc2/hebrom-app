@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:intl/intl.dart';
 import 'package:date_field/date_field.dart';
 import 'package:hebrom_app/service/evento_service.dart' as EventService;
@@ -34,31 +36,57 @@ class _FiltersPageState extends State<FiltersPage> {
   @override
   void initState() {
     super.initState();
+    adquirirDados();
+  }
+
+  adquirirDados() async {
+    final SharedPreferences prefs = await _prefs;
+
+    final successEntidades = (list) {
+      List<dynamic> values = json.decode(prefs.getString('entidades'));
+      for (var x in list) {
+        var item = DropdownMenuItem(
+          child: Text(x.nomeFantasia),
+          value: (x.id),
+        );
+
+        setState(() {
+          itemsEntidade.add(item);
+          selectedItemsEntidades.add(values.indexOf(x.id));
+        });
+      }
+    };
+
+    final successLocalizacao = (list) {
+      List<dynamic> values = json.decode(prefs.getString('localizacoes'));
+      for (var x in list) {
+        var item = DropdownMenuItem(
+          child: Text(x.descricao),
+          value: (x.id),
+        );
+
+        setState(() {
+          itemsLocalizacao.add(item);
+          selectedItemsLocalizacao.add(values.indexOf(x.id));
+        });
+      }
+    };
+
     setState(() {
-      final successEntidades = (list) {
-        list.forEach((x) => {
-              itemsEntidade.add(DropdownMenuItem(
-                child: Text(x.nomeFantasia),
-                value: (x.id),
-              ))
-            });
-      };
+      if (prefs.getString('dataFim') != null) {
+        dateFim = DateTime.parse(prefs.getString('dataFim'));
+      }
 
-      EventService.getEntidades(
-          'entidadeService/adquirirTodos', successEntidades);
-
-      final successLocalizacao = (list) {
-        list.forEach((x) => {
-              itemsLocalizacao.add(DropdownMenuItem(
-                child: Text(x.descricao),
-                value: (x.id),
-              ))
-            });
-      };
-
-      EventService.getLocalizacao(
-          'localizacaoService/adquirirTodos', successLocalizacao);
+      if (prefs.getString('dataInicio') != null) {
+        dateInicio = DateTime.parse(prefs.getString('dataInicio'));
+      }
     });
+
+    EventService.getEntidades(
+        'entidadeService/adquirirTodos', successEntidades);
+
+    EventService.getLocalizacao(
+        'localizacaoService/adquirirTodos', successLocalizacao);
   }
 
   @override
@@ -209,7 +237,7 @@ class _FiltersPageState extends State<FiltersPage> {
                   onDateSelected: (DateTime value) {
                     setState(() {
                       dateInicio = value;
-                      _setFilter("dateInicio", value);
+                      _setFilter("dataInicio", value);
                     });
                   },
                   selectedDate: dateInicio,
@@ -237,7 +265,7 @@ class _FiltersPageState extends State<FiltersPage> {
                   onDateSelected: (DateTime value) {
                     setState(() {
                       dateFim = value;
-                      _setFilter("dateFim", value);
+                      _setFilter("dataFim", value);
                     });
                   },
                   selectedDate: dateFim,
@@ -246,11 +274,6 @@ class _FiltersPageState extends State<FiltersPage> {
                     enabledBorder: InputBorder.none,
                   ),
                 )),
-            RaisedButton(
-                color: Colors.greenAccent[700],
-                textColor: Colors.white,
-                onPressed: () {},
-                child: Text("Aplicar Filtros")),
           ],
         )));
   }
