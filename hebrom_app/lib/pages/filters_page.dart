@@ -3,6 +3,7 @@ import 'package:date_field/date_field.dart';
 import 'package:hebrom_app/service/evento_service.dart' as EventService;
 import 'package:searchable_dropdown/searchable_dropdown.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FiltersPage extends StatefulWidget {
   FiltersPage({Key key}) : super(key: key);
@@ -13,6 +14,22 @@ class FiltersPage extends StatefulWidget {
 
 class _FiltersPageState extends State<FiltersPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  DateTime dateInicio;
+  DateTime dateFim;
+  List<int> selectedItemsEntidades = [];
+  List<int> selectedItemsLocalizacao = [];
+
+  final List<DropdownMenuItem> itemsLocalizacao = [];
+  final List<DropdownMenuItem> itemsEntidade = [];
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+  Future<void> _setFilter(key, value) async {
+    final SharedPreferences prefs = await _prefs;
+
+    setState(() {
+      prefs.setString(key, value.toString());
+    });
+  }
 
   @override
   void initState() {
@@ -22,7 +39,7 @@ class _FiltersPageState extends State<FiltersPage> {
         list.forEach((x) => {
               itemsEntidade.add(DropdownMenuItem(
                 child: Text(x.nomeFantasia),
-                value: x.id,
+                value: (x.id),
               ))
             });
       };
@@ -34,7 +51,7 @@ class _FiltersPageState extends State<FiltersPage> {
         list.forEach((x) => {
               itemsLocalizacao.add(DropdownMenuItem(
                 child: Text(x.descricao),
-                value: x.id,
+                value: (x.id),
               ))
             });
       };
@@ -43,14 +60,6 @@ class _FiltersPageState extends State<FiltersPage> {
           'localizacaoService/adquirirTodos', successLocalizacao);
     });
   }
-
-  DateTime dateInicio;
-  DateTime dateFim;
-  List<int> selectedItemsEntidades = [];
-  List<int> selectedItemsLocalizacao = [];
-
-  final List<DropdownMenuItem> itemsLocalizacao = [];
-  final List<DropdownMenuItem> itemsEntidade = [];
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +91,13 @@ class _FiltersPageState extends State<FiltersPage> {
                 displayClearIcon: true,
                 onChanged: (value) {
                   setState(() {
+                    var itens = [];
+                    for (var item in value) {
+                      itens.add(itemsEntidade[item].value);
+                    }
+
                     selectedItemsEntidades = value;
+                    _setFilter("entidades", itens);
                   });
                 },
                 dialogBox: true,
@@ -137,6 +152,13 @@ class _FiltersPageState extends State<FiltersPage> {
                 onChanged: (value) {
                   setState(() {
                     selectedItemsLocalizacao = value;
+
+                    var itens = [];
+                    for (var item in value) {
+                      itens.add(itemsLocalizacao[item].value);
+                    }
+
+                    _setFilter("localizacoes", itens);
                   });
                 },
                 dialogBox: true,
@@ -187,6 +209,7 @@ class _FiltersPageState extends State<FiltersPage> {
                   onDateSelected: (DateTime value) {
                     setState(() {
                       dateInicio = value;
+                      _setFilter("dateInicio", value);
                     });
                   },
                   selectedDate: dateInicio,
@@ -214,6 +237,7 @@ class _FiltersPageState extends State<FiltersPage> {
                   onDateSelected: (DateTime value) {
                     setState(() {
                       dateFim = value;
+                      _setFilter("dateFim", value);
                     });
                   },
                   selectedDate: dateFim,

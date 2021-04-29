@@ -4,32 +4,53 @@ import 'package:hebrom_app/dto/Entidade.dart';
 import 'package:hebrom_app/dto/Evento.dart';
 import 'package:hebrom_app/dto/Localizacao.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 
-const BASE_URL = "http://192.168.1.102:8080/";
+const BASE_URL = "http://192.168.0.127:8080/";
 const HEADERS = {'Content-type': 'application/json'};
 const STATUS_CODE_SUCESS = 200;
 const IMAGEM_SERVICE = "fileService/files/";
+Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
 Future<List<Evento>> getEvento(
     String url, String pesquisa, int categoria) async {
-  if (pesquisa != null && pesquisa != "") {
-    url += '?pesquisa=' + pesquisa;
+  final SharedPreferences prefs = await _prefs;
 
-    if (categoria != null) {
-      url += "&";
-    }
+  Map<String, String> queryParameters = {};
+
+  if (pesquisa != null && pesquisa != "") {
+    queryParameters["pesquisa"] = pesquisa;
   }
 
-  if (categoria != null && (pesquisa == null || pesquisa == "")) {
-    url += "?";
+  if (prefs.getString('entidades') != null) {
+    queryParameters["entidades"] = prefs.getString('entidades');
+  }
+
+  if (prefs.getString('localizacoes') != null) {
+    queryParameters["localizacoes"] = prefs.getString('localizacoes');
+  }
+
+  if (prefs.getString('dataInicio') != null) {
+    queryParameters["dataInicio"] = prefs.getString('dataInicio');
+  }
+
+  if (prefs.getString('dataFim') != null) {
+    queryParameters["dataFim"] = prefs.getString('dataFim');
   }
 
   if (categoria != null) {
-    url += 'categoria=' + categoria.toString();
+    queryParameters["categoria"] = categoria.toString();
   }
 
-  http.Response response = await http.get(BASE_URL + url, headers: HEADERS);
+  var uri = Uri(queryParameters: queryParameters).query;
+
+  if (uri != null && uri != "") {
+    uri = "?" + uri;
+  }
+
+  http.Response response =
+      await http.get(BASE_URL + url + uri, headers: HEADERS);
 
   var body = json.decode(response.body);
 

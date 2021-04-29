@@ -6,6 +6,7 @@ import 'package:hebrom_app/widgets/EventList.dart';
 import 'package:searchable_dropdown/searchable_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:hebrom_app/service/evento_service.dart' as EventService;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../animation/FadeAnimation.dart';
 
@@ -27,7 +28,6 @@ class _EventsPageState extends State<EventsPage> {
   @override
   void initState() {
     super.initState();
-    getEventos(null, null);
     getCategorias();
   }
 
@@ -48,6 +48,7 @@ class _EventsPageState extends State<EventsPage> {
   getCategorias() async {
     setState(() {
       categorias = EventService.getCategorias('categoriaService/adquirirTodos');
+      getEventos(_pesquisa.text, categoriaId);
     });
   }
 
@@ -132,7 +133,7 @@ class _EventsPageState extends State<EventsPage> {
                             ),
                           ));
                     },
-                    itemCount: snapshot.data.length,
+                    itemCount: snapshot.data?.length ?? 0,
                   ));
             },
           ),

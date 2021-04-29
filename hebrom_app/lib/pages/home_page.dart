@@ -47,10 +47,7 @@ class _HomePageState extends State<HomePage> {
               )),
         ],
       ),
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: <Widget>[EventsPage(), FiltersPage()],
-      ),
+      body: _selectedIndex == 0 ? EventsPage() : FiltersPage(),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
