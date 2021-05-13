@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 
-const BASE_URL = "http://192.168.3.3:8080/";
+const BASE_URL = "http://192.168.0.127:8080/";
 const HEADERS = {'Content-type': 'application/json'};
 const STATUS_CODE_SUCESS = 200;
 const IMAGEM_SERVICE = "fileService/files/";
@@ -52,9 +52,8 @@ Future<List<Evento>> getEvento(
   http.Response response =
       await http.get(BASE_URL + url + uri, headers: HEADERS);
 
-  var body = json.decode(response.body);
-
   if (response.statusCode == STATUS_CODE_SUCESS) {
+    var body = json.decode(utf8.decode(response.bodyBytes));
     List<Evento> retorno = body.map<Evento>((map) {
       return Evento.fromJson(map);
     }).toList();
@@ -70,9 +69,8 @@ String getUriBanner(String fileName) {
 Future<List<Categoria>> getCategorias(url) async {
   http.Response response = await http.get(BASE_URL + url, headers: HEADERS);
 
-  var body = json.decode(response.body);
-
   if (response.statusCode == STATUS_CODE_SUCESS) {
+    var body = json.decode(utf8.decode(response.bodyBytes));
     List<Categoria> retorno = body.map<Categoria>((map) {
       return Categoria.fromJson(map);
     }).toList();
@@ -84,9 +82,8 @@ Future<List<Categoria>> getCategorias(url) async {
 Future<List<Entidade>> getEntidades(url, successEntidades) async {
   http.Response response = await http.get(BASE_URL + url, headers: HEADERS);
 
-  var body = json.decode(response.body);
-
   if (response.statusCode == STATUS_CODE_SUCESS) {
+    var body = json.decode(utf8.decode(response.bodyBytes));
     List<Entidade> retorno = body.map<Entidade>((map) {
       return Entidade.fromJson(map);
     }).toList();
@@ -100,9 +97,8 @@ Future<List<Entidade>> getEntidades(url, successEntidades) async {
 Future<List<Localizacao>> getLocalizacao(url, successLocalizacao) async {
   http.Response response = await http.get(BASE_URL + url, headers: HEADERS);
 
-  var body = json.decode(response.body);
-
   if (response.statusCode == STATUS_CODE_SUCESS) {
+    var body = json.decode(utf8.decode(response.bodyBytes));
     List<Localizacao> retorno = body.map<Localizacao>((map) {
       return Localizacao.fromJson(map);
     }).toList();
