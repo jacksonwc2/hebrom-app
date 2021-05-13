@@ -43,13 +43,11 @@ class _FiltersPageState extends State<FiltersPage> {
     final SharedPreferences prefs = await _prefs;
 
     final successEntidades = (list) {
-
       List<dynamic> values = [];
 
-      if(prefs.getString('entidades') != null){
+      if (prefs.getString('entidades') != null) {
         values = json.decode(prefs.getString('entidades'));
       }
-
 
       for (var x in list) {
         var item = DropdownMenuItem(
@@ -59,14 +57,14 @@ class _FiltersPageState extends State<FiltersPage> {
 
         setState(() {
           itemsEntidade.add(item);
-          selectedItemsEntidades.add(values.indexOf(x.id));
+          //selectedItemsEntidades.add(values.indexOf(x.id));
         });
       }
     };
 
     final successLocalizacao = (list) {
       List<dynamic> values = [];
-      if(prefs.getString('localizacoes') != null){
+      if (prefs.getString('localizacoes') != null) {
         values = json.decode(prefs.getString('localizacoes'));
       }
 
@@ -78,7 +76,7 @@ class _FiltersPageState extends State<FiltersPage> {
 
         setState(() {
           itemsLocalizacao.add(item);
-          selectedItemsLocalizacao.add(values.indexOf(x.id));
+          //selectedItemsLocalizacao.add(values.indexOf(x.id));
         });
       }
     };
