@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 
-const BASE_URL = "http://192.168.0.127:8080/";
+const BASE_URL = "http://18.116.72.213:8081/";
 const HEADERS = {'Content-type': 'application/json'};
 const STATUS_CODE_SUCESS = 200;
 const IMAGEM_SERVICE = "fileService/files/";
