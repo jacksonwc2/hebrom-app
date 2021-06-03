@@ -36,15 +36,40 @@ class _HomePageState extends State<HomePage> {
         elevation: 0,
         bottomOpacity: 0,
         actions: <Widget>[
+
+          _selectedIndex == 1 ?
           Padding(
               padding: EdgeInsets.only(right: 20),
               child: GestureDetector(
-                child: Icon(
-                  Icons.info_outline_rounded,
-                  size: 22,
-                  color: Colors.black54,
-                ),
-              )),
+                child: InkWell(
+                  onTap: ()  {
+                   setState(() {
+                     _selectedIndex = 0;
+                   });
+                  },
+                  child:  Row(
+                    children: [
+                      Text('Aplicar filtros', style: TextStyle(fontSize: 10, color:Colors.black ),),
+                      SizedBox(width: 5),
+                      Icon(
+                        Icons.check_circle_outline,
+                        size: 20,
+                        color: Colors.green,
+                      ),
+                    ],
+                  ),
+                )
+              )) :   Padding(
+              padding: EdgeInsets.only(right: 20),
+              child: GestureDetector(
+                  child:
+                        Icon(
+                          Icons.info_outline_rounded,
+                          size: 20,
+                          color: Colors.grey,
+                        ),
+                    ),
+                  )
         ],
       ),
       body: _selectedIndex == 0 ? EventsPage() : FiltersPage(),

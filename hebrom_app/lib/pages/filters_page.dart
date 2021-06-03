@@ -36,6 +36,7 @@ class _FiltersPageState extends State<FiltersPage> {
   @override
   void initState() {
     super.initState();
+
     adquirirDados();
   }
 
@@ -57,9 +58,16 @@ class _FiltersPageState extends State<FiltersPage> {
 
         setState(() {
           itemsEntidade.add(item);
-          //selectedItemsEntidades.add(values.indexOf(x.id));
         });
       }
+
+      for ( var dados in values) {
+        setState(() {
+          selectedItemsEntidades.add(itemsEntidade.indexWhere((element) => element.value == dados));
+        });
+      }
+
+
     };
 
     final successLocalizacao = (list) {
@@ -76,7 +84,12 @@ class _FiltersPageState extends State<FiltersPage> {
 
         setState(() {
           itemsLocalizacao.add(item);
-          //selectedItemsLocalizacao.add(values.indexOf(x.id));
+        });
+      }
+
+      for ( var dados in values) {
+        setState(() {
+          selectedItemsLocalizacao.add(itemsLocalizacao.indexWhere((element) => element.value == dados));
         });
       }
     };
@@ -138,31 +151,8 @@ class _FiltersPageState extends State<FiltersPage> {
                   });
                 },
                 dialogBox: true,
-                closeButton: (selectedItemsClose) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      RaisedButton(
-                          onPressed: () {
-                            setState(() {
-                              selectedItemsEntidades.clear();
-                              selectedItemsEntidades.addAll(
-                                  Iterable<int>.generate(itemsEntidade.length)
-                                      .toList());
-                            });
-                          },
-                          child: Text("Todos")),
-                      RaisedButton(
-                          onPressed: () {
-                            setState(() {
-                              selectedItemsEntidades.clear();
-                            });
-                          },
-                          child: Text("Nenhum")),
-                    ],
-                  );
-                },
                 isExpanded: true,
+                  closeButton: 'Salvar'
               ),
             ),
             Padding(
@@ -199,32 +189,8 @@ class _FiltersPageState extends State<FiltersPage> {
                   });
                 },
                 dialogBox: true,
-                closeButton: (selectedItemsClose) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      RaisedButton(
-                          onPressed: () {
-                            setState(() {
-                              selectedItemsLocalizacao.clear();
-                              selectedItemsLocalizacao.addAll(
-                                  Iterable<int>.generate(
-                                          itemsLocalizacao.length)
-                                      .toList());
-                            });
-                          },
-                          child: Text("Todos")),
-                      RaisedButton(
-                          onPressed: () {
-                            setState(() {
-                              selectedItemsLocalizacao.clear();
-                            });
-                          },
-                          child: Text("Nenhum")),
-                    ],
-                  );
-                },
                 isExpanded: true,
+                  closeButton: 'Salvar'
               ),
             ),
             Padding(

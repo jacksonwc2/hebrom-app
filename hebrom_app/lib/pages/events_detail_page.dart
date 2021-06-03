@@ -31,35 +31,31 @@ class _EventsDetailPageState extends State<EventsDetailPage> {
               decoration: new BoxDecoration(
                   border: Border.all(color: Colors.grey[200])),
               child: ListTile(
-                  title: Text('Entidade', style: TextStyle(fontSize: 10)),
-                  subtitle: Text(widget.evento.descricaoEntidade,
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  trailing: Icon(Icons.home_work))),
+                  title: Text('Entidade', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
+                  subtitle: Text(widget.evento.descricaoEntidade),
+                  trailing: Icon(Icons.home_work, color: Colors.black, size: 18))),
           Container(
               decoration: new BoxDecoration(
                   border: Border.all(color: Colors.grey[200])),
               child: ListTile(
-                  title: Text('Categoria', style: TextStyle(fontSize: 10)),
-                  subtitle: Text(widget.evento.descricaoCategoria,
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  trailing: Icon(Icons.local_offer))),
+                  title: Text('Categoria', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
+                  subtitle: Text(widget.evento.descricaoCategoria),
+                  trailing: Icon(Icons.local_offer, color: Colors.black, size: 18))),
           Container(
               decoration: new BoxDecoration(
                   border: Border.all(color: Colors.grey[200])),
               child: ListTile(
-                  title: Text('Início', style: TextStyle(fontSize: 10)),
-                  subtitle: Text(widget.evento.dataInicio,
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  trailing: Icon(Icons.calendar_today))),
+                  title: Text('Início', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
+                  subtitle: Text(widget.evento.dataInicio),
+                  trailing: Icon(Icons.calendar_today, color: Colors.black, size: 18))),
           widget.evento.dataFinal != null
               ? Container(
                   decoration: new BoxDecoration(
                       border: Border.all(color: Colors.grey[200])),
                   child: ListTile(
-                      title: Text('Final', style: TextStyle(fontSize: 10)),
-                      subtitle: Text(widget.evento.dataFinal,
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      trailing: Icon(Icons.calendar_today)))
+                      title: Text('Final', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
+                      subtitle: Text(widget.evento.dataFinal),
+                      trailing: Icon(Icons.calendar_today, color: Colors.black, size: 18)))
               : Container(),
           InkWell(
               onTap: () async {
@@ -70,10 +66,15 @@ class _EventsDetailPageState extends State<EventsDetailPage> {
                       border: Border.all(color: Colors.grey[200])),
                   child: ListTile(
                       title: Text(widget.evento.descricaoLocalizacao,
-                          style: TextStyle(fontSize: 10)),
-                      subtitle: Text(widget.evento.obsLocalizacao,
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      trailing: Icon(Icons.place)))),
+                          style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
+                      subtitle: Text(widget.evento.obsLocalizacao),
+                      trailing: Column(
+                        children: [
+                          Icon(Icons.place, color: Colors.deepOrange),
+                          SizedBox(height: 8,),
+                          Text('Abrir', style:TextStyle(fontSize: 10, color: Colors.deepOrange), )
+                        ],
+                      )))),
           widget.evento.descricao != null
               ? Container(
                   child: ListTile(
